@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "549912651536",
+    "project_id": "social-media-app-474b2",
+    "storage_bucket": "social-media-app-474b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549912651536:android:0a0ed69a4053aca645e795",
+        "android_client_info": {
+          "package_name": "com.example.social_media_app2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBD5_ASNFeZDHRFCAtID5BrO6pwbGOQL0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549912651536:android:80140b9d6f49c84d45e795",
+        "android_client_info": {
+          "package_name": "com.example.sportify_gym_porject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBD5_ASNFeZDHRFCAtID5BrO6pwbGOQL0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
