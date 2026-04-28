@@ -19,7 +19,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.4 <4.0.0'
+  sdk: ^3.5.0
+
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,10 +36,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  camera: ^0.10.5
+  camera: ^0.12.0
   google_mlkit_pose_detection: ^0.11.1
   image: ^4.0.17
-  permission_handler: ^10.2.0
+  permission_handler: ^12.0.0
   # Add lifecycle dependency
   flutter_lifecycle_aware: ^0.0.3
   provider:
@@ -49,15 +50,21 @@ dependencies:
   firebase_storage:
   cloud_firestore:
   firebase_auth:
-  image_picker:
-  shared_preferences:
-  flutter_slidable: ^2.0.0
+  image_picker: ^1.1.2
+  shared_preferences: ^2.5.0
+  flutter_slidable: ^4.0.0
 #  timeago:
   flutter_launcher_icons:
   archive: ^3.3.7  # Add this line explicitly
 
 
 
+
+dependency_overrides:
+  # Transitive fix for Dart 3.5+ / Flutter 3.38 (UnmodifiableUint8ListView).
+  win32: ^5.5.4
+  # v1 embedding removed in current Flutter; pull Android lifecycle plugin new enough for v2.
+  flutter_plugin_android_lifecycle: ^2.0.22
 
 dev_dependencies:
   flutter_test:

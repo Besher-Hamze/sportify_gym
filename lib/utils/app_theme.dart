@@ -32,7 +32,7 @@ class AppTheme {
       error: AppColors.error,
     ),
     scaffoldBackgroundColor: AppColors.background,
-    cardTheme: const CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.surface,
       elevation: 4,
       margin: EdgeInsets.all(8),

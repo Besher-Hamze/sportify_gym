@@ -95,13 +95,13 @@ class ExerciseSelectionScreen extends StatelessWidget {
   }
 
   void _navigateToExercise(BuildContext context, Exercise exercise) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => PoseDetectionScreen(
-          cameras: cameras,
-          initialExercise: exercise.type,
-        ),
-      ),
-    );
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) => PoseDetectionScreen(
+    //       cameras: cameras,
+    //       initialExercise: exercise.type,
+    //     ),
+    //   ),
+    // );
   }
 }
