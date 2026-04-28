@@ -360,7 +360,7 @@ class OrderHistoryScreen extends GetView<MealController> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Get.back(result: false),
+              onPressed: () => Navigator.of(Get.overlayContext!).pop(false),
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -377,7 +377,7 @@ class OrderHistoryScreen extends GetView<MealController> {
             ),
             ElevatedButton.icon(
               onPressed: () async {
-                Get.back(result: true);
+                Navigator.of(Get.overlayContext!).pop(true);
                 await controller.updateOrderStatus(order['orderId'], "paid");
               },
               icon: const Icon(Icons.check_circle_outline, size: 18),
@@ -413,8 +413,9 @@ class OrderHistoryScreen extends GetView<MealController> {
       }
     } catch (e) {
       // Close loading dialog if open
-      if (Get.isDialogOpen!) {
-        Get.back();
+      if (Get.overlayContext != null &&
+          Navigator.of(Get.overlayContext!, rootNavigator: true).canPop()) {
+        Navigator.of(Get.overlayContext!, rootNavigator: true).pop();
       }
     }
   }

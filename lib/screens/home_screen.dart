@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sportify_gym_porject/controllers/meal_controller.dart';
 import 'package:sportify_gym_porject/screens/exercise_selection_screen.dart';
-import 'package:sportify_gym_porject/screens/favorite_screen.dart';
-import 'package:sportify_gym_porject/screens/my_cart.dart';
-import 'package:sportify_gym_porject/screens/order_history.dart';
 import '../controllers/home_controller.dart';
 import '../models/meal.dart';
 import '../utils/app_theme.dart';
@@ -234,19 +231,21 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Image
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(20),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.12),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
                 ),
-                child: Image.network(
-                  meal.image,
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+                child: Icon(
+                  Icons.restaurant_menu,
+                  size: 36,
+                  color: AppColors.primary,
                 ),
               ),
-              // Content
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(

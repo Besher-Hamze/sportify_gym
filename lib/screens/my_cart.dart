@@ -176,30 +176,18 @@ class CartScreen extends GetView<MealController> {
         ),
         child: Row(
           children: [
-            Hero(
-              tag: 'meal_image_${meal.id}',
-              child: ClipRRect(
-                borderRadius: const BorderRadius.horizontal(
-                  left: Radius.circular(16),
-                ),
-                child: Image.network(
-                  meal.image,
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 120,
-                      height: 120,
-                      color: Colors.grey[800],
-                      child: const Icon(
-                        Icons.restaurant_menu,
-                        size: 32,
-                        color: Colors.white54,
-                      ),
-                    );
-                  },
-                ),
+            Container(
+              width: 88,
+              height: 88,
+              margin: const EdgeInsets.only(left: 12),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.restaurant_menu,
+                size: 36,
+                color: AppColors.primary,
               ),
             ),
             Expanded(
@@ -392,8 +380,12 @@ class CartScreen extends GetView<MealController> {
   }
 
   Future<void> _showOrderConfirmation() async {
-    final result = await Get.dialog<bool>(
-      AlertDialog(
+    final context = Get.context;
+    if (context == null) return;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -444,14 +436,14 @@ class CartScreen extends GetView<MealController> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Get.back(result: false),
+            onPressed: () => Navigator.of(dialogContext).pop(false),
             child: const Text(
               'Cancel',
               style: TextStyle(fontSize: 16),
             ),
           ),
           ElevatedButton(
-            onPressed: () => Get.back(result: true),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               padding: const EdgeInsets.symmetric(

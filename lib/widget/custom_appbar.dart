@@ -29,14 +29,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             Icon(
               Icons.fitness_center,
-              size: 30,
+              size: 20,
               color: AppColors.primary,
             ),
             const SizedBox(width: 8),
             const Text(
               'Fitness App',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
             ),

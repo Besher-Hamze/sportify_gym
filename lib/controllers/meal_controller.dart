@@ -19,6 +19,27 @@ class MealController extends GetxController {
   final selectedCategory = 'All'.obs;
   final totalAmount = 0.0.obs;
 
+  void _showSnackbarSafe({
+    required String title,
+    required String message,
+    Color backgroundColor = Colors.black87,
+    SnackPosition snackPosition = SnackPosition.TOP,
+    Duration? duration,
+  }) {
+    if (Get.context == null) {
+      debugPrint('$title: $message');
+      return;
+    }
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: snackPosition,
+      backgroundColor: backgroundColor,
+      colorText: Colors.white,
+      duration: duration,
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -317,12 +338,11 @@ class MealController extends GetxController {
       cartItems.clear();
       totalAmount.value = 0;
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to clear cart',
+      _showSnackbarSafe(
+        title: 'Error',
+        message: 'Failed to clear cart',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
-        colorText: Colors.white,
       );
     }
   }
@@ -358,12 +378,10 @@ class MealController extends GetxController {
         orderHistory[orderIndex] = updatedOrder;
       }
 
-      Get.snackbar(
-        'Success',
-        'Payment processed successfully!',
-        snackPosition: SnackPosition.TOP,
+      _showSnackbarSafe(
+        title: 'Success',
+        message: 'Payment processed successfully!',
         backgroundColor: Colors.green,
-        colorText: Colors.white,
         duration: const Duration(seconds: 3),
       );
 
@@ -373,12 +391,10 @@ class MealController extends GetxController {
       });
     } catch (e) {
       print('Error processing payment: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to process payment. Please try again.',
-        snackPosition: SnackPosition.TOP,
+      _showSnackbarSafe(
+        title: 'Error',
+        message: 'Failed to process payment. Please try again.',
         backgroundColor: Colors.red,
-        colorText: Colors.white,
       );
     } finally {
       isLoading.value = false;
@@ -414,22 +430,18 @@ class MealController extends GetxController {
       }
 
       // Show success message for status update
-      Get.snackbar(
-        'Status Updated',
-        'Order status changed to $newStatus',
-        snackPosition: SnackPosition.TOP,
+      _showSnackbarSafe(
+        title: 'Status Updated',
+        message: 'Order status changed to $newStatus',
         backgroundColor: Colors.green,
-        colorText: Colors.white,
         duration: const Duration(seconds: 2),
       );
     } catch (e) {
       print('Error updating order status: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to update order status',
-        snackPosition: SnackPosition.TOP,
+      _showSnackbarSafe(
+        title: 'Error',
+        message: 'Failed to update order status',
         backgroundColor: Colors.red,
-        colorText: Colors.white,
       );
     }
   }
@@ -438,23 +450,19 @@ class MealController extends GetxController {
     try {
       final user = _auth.currentUser;
       if (user == null) {
-        Get.snackbar(
-          'Error',
-          'Please log in to place an order',
-          snackPosition: SnackPosition.TOP,
+        _showSnackbarSafe(
+          title: 'Error',
+          message: 'Please log in to place an order',
           backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
         return;
       }
 
       if (cartItems.isEmpty) {
-        Get.snackbar(
-          'Error',
-          'Your cart is empty',
-          snackPosition: SnackPosition.TOP,
+        _showSnackbarSafe(
+          title: 'Error',
+          message: 'Your cart is empty',
           backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
         return;
       }
@@ -492,12 +500,10 @@ class MealController extends GetxController {
       // Clear cart after successful order creation
       await clearCart();
 
-      Get.snackbar(
-        'Success',
-        'Order placed successfully!',
-        snackPosition: SnackPosition.TOP,
+      _showSnackbarSafe(
+        title: 'Success',
+        message: 'Order placed successfully!',
         backgroundColor: Colors.green,
-        colorText: Colors.white,
         duration: const Duration(seconds: 3),
       );
 
@@ -505,12 +511,10 @@ class MealController extends GetxController {
       Get.to(OrderHistoryScreen());
     } catch (e) {
       print('Error placing order: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to place order. Please try again.',
-        snackPosition: SnackPosition.TOP,
+      _showSnackbarSafe(
+        title: 'Error',
+        message: 'Failed to place order. Please try again.',
         backgroundColor: Colors.red,
-        colorText: Colors.white,
       );
     } finally {
       isLoading.value = false;

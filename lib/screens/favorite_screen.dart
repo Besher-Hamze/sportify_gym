@@ -99,48 +99,37 @@ class FavoritesScreen extends GetView<MealController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(12),
-                            ),
-                            child: Image.network(
-                              meal.image,
-                              height: 120,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  height: 120,
-                                  color: Colors.grey[800],
-                                  child: const Icon(
-                                    Icons.restaurant_menu,
-                                    color: Colors.white54,
-                                  ),
-                                );
-                              },
-                            ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.12),
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
                           ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                  size: 20,
-                                ),
-                                onPressed: () => controller.toggleFavorite(meal.id),
-                              ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.restaurant_menu,
+                              color: AppColors.primary,
+                              size: 22,
                             ),
-                          ),
-                        ],
+                            const Spacer(),
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 22,
+                              ),
+                              onPressed: () => controller.toggleFavorite(meal.id),
+                            ),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(12),

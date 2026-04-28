@@ -71,30 +71,27 @@ class MealDetailScreen extends StatelessWidget {
 
   Widget _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 300,
+      expandedHeight: 160,
       pinned: true,
       backgroundColor: AppColors.surface,
       flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.network(
-              meal.image,
-              fit: BoxFit.cover,
+        background: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.primary.withOpacity(0.2),
+                AppColors.surface,
+              ],
             ),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.7),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          ),
+          child: Icon(
+            Icons.restaurant_menu,
+            size: 64,
+            color: AppColors.primary.withOpacity(0.95),
+          ),
         ),
       ),
       leading: Container(
