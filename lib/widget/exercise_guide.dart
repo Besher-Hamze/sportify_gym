@@ -80,6 +80,17 @@ class ExerciseGuide extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.asset(
+                  exercise.gifAsset,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
             const Text(
               'Target Muscles',
               style: TextStyle(

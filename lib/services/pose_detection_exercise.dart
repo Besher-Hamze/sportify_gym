@@ -3,6 +3,16 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import '../models/exercise.dart';
 
 class PoseDetectionService {
+  void _setWrongForm(ExerciseState state, String message) {
+    state.isFormWrong = true;
+    state.formMessage = message;
+  }
+
+  void _clearWrongForm(ExerciseState state) {
+    state.isFormWrong = false;
+    state.formMessage = '';
+  }
+
   double _calculateAngle(
       PoseLandmark first, PoseLandmark middle, PoseLandmark last) {
     final radians = math.atan2(last.y - middle.y, last.x - middle.x) -
@@ -68,20 +78,27 @@ class PoseDetectionService {
       final rightAngle = _calculateAngle(rightHip!, rightKnee!, rightAnkle!);
       final leftHand = _calculateAngle(leftShoulder!, leftElbow!, leftWrist!);
       final rightHand = _calculateAngle(rightShoulder!, rightElbow!, rightWrist!);
+      final handsNotInFront = !_checkHanding(leftHand, rightHand, 100);
 
       if (leftAngle < 100 &&
           rightAngle < 100 &&
           !state.isDown &&
-          _checkHanding(leftHand, rightHand, 100)) {
+          !handsNotInFront) {
+        _clearWrongForm(state);
         state.isDown = true;
         state.message = 'Good! Now stand up';
       } else if (leftAngle > 150 &&
           rightAngle > 150 &&
           state.isDown &&
-          _checkHanding(leftHand, rightHand, 100)) {
+          !handsNotInFront) {
+        _clearWrongForm(state);
         state.isDown = false;
         state.repCount++;
         state.message = 'Rep ${state.repCount} completed!';
+      } else if (handsNotInFront) {
+        _setWrongForm(state, 'Keep both hands in front of your chest');
+      } else if (leftAngle > 120 || rightAngle > 120) {
+        _setWrongForm(state, 'Go lower, keep knees bent for a full squat');
       }
     }
   }
@@ -95,12 +112,16 @@ class PoseDetectionService {
       final angle = _calculateAngle(leftShoulder!, leftElbow!, leftWrist!);
 
       if (angle < 90 && !state.isDown) {
+        _clearWrongForm(state);
         state.isDown = true;
         state.message = 'Good! Now push up';
       } else if (angle > 160 && state.isDown) {
+        _clearWrongForm(state);
         state.isDown = false;
         state.repCount++;
         state.message = 'Rep ${state.repCount} completed!';
+      } else if (angle >= 90 && angle <= 160) {
+        _setWrongForm(state, 'Lower your chest more and keep elbows controlled');
       }
     }
   }
@@ -121,14 +142,23 @@ class PoseDetectionService {
     ])) {
       final leftHand = _calculateAngle(leftShoulder!, leftElbow!, leftWrist!);
       final rightHand = _calculateAngle(rightShoulder!, rightElbow!, rightWrist!);
-      final leftSideAngle = _calculateAngle(leftSide!, leftShoulder!, leftElbow!);
-      final rightSideAngle = _calculateAngle(rightSide!, rightShoulder!, rightElbow!);
+      final leftSideAngle = _calculateAngle(
+        leftSide as PoseLandmark,
+        leftShoulder,
+        leftElbow,
+      );
+      final rightSideAngle = _calculateAngle(
+        rightSide as PoseLandmark,
+        rightShoulder,
+        rightElbow,
+      );
 
       if (leftHand > 160 &&
           rightHand > 160 &&
           leftSideAngle > 80 &&
           rightSideAngle > 80 &&
           !state.isDown) {
+        _clearWrongForm(state);
         state.isDown = true;
         state.message = 'Good! Now close your arms wide!';
       } else if (leftHand > 160 &&
@@ -136,9 +166,14 @@ class PoseDetectionService {
           leftSideAngle < 80 &&
           rightSideAngle < 80 &&
           state.isDown) {
+        _clearWrongForm(state);
         state.isDown = false;
         state.repCount++;
         state.message = 'Rep ${state.repCount} completed!';
+      } else if (leftHand <= 160 || rightHand <= 160) {
+        _setWrongForm(state, 'Keep your arms straighter during butterfly reps');
+      } else {
+        _setWrongForm(state, 'Open and close symmetrically at shoulder height');
       }
     }
   }
@@ -157,22 +192,32 @@ class PoseDetectionService {
     ])) {
       final frontLegAngle = _calculateAngle(leftHip!, leftKnee!, leftAnkle!);
       final backLegAngle = _calculateAngle(rightHip!, rightKnee!, rightAnkle!);
-      final kneeDistance = _calculateDistance(leftKnee!, rightKnee!) / 100;
+      final kneeDistance = _calculateDistance(
+            leftKnee,
+            rightKnee,
+          ) /
+          100;
 
       if (frontLegAngle < 100 &&
           backLegAngle < 120 &&
           backLegAngle > 80 &&
           kneeDistance > 1.5 &&
           !state.isDown) {
+        _clearWrongForm(state);
         state.isDown = true;
         state.message = 'Good! Now stand up';
       } else if (frontLegAngle > 160 &&
           backLegAngle > 160 &&
           kneeDistance > 1.5 &&
           state.isDown) {
+        _clearWrongForm(state);
         state.isDown = false;
         state.repCount++;
         state.message = 'Rep ${state.repCount} completed!';
+      } else if (kneeDistance <= 1.5) {
+        _setWrongForm(state, 'Take a wider step for a stable lunge');
+      } else {
+        _setWrongForm(state, 'Bend both knees to around 90 degrees');
       }
     }
   }
@@ -200,6 +245,7 @@ class PoseDetectionService {
           leftArmAngle > 150 &&
           rightArmAngle > 150 &&
           !state.isDown) {
+        _clearWrongForm(state);
         state.isDown = true;
         state.message = 'Good! Now bring arms down';
       } else if (!leftArmRaised &&
@@ -207,9 +253,14 @@ class PoseDetectionService {
           leftArmAngle > 150 &&
           rightArmAngle > 150 &&
           state.isDown) {
+        _clearWrongForm(state);
         state.isDown = false;
         state.repCount++;
         state.message = 'Rep ${state.repCount} completed!';
+      } else if (leftArmAngle <= 150 || rightArmAngle <= 150) {
+        _setWrongForm(state, 'Straighten both arms while rotating');
+      } else {
+        _setWrongForm(state, 'Raise both arms together over shoulder level');
       }
     }
   }
@@ -227,12 +278,18 @@ class PoseDetectionService {
       final legAngle = _calculateAngle(leftHip, leftKnee, leftAnkle!);
 
       if (kneeHipDiff > 0.2 && legAngle > 150 && !state.isDown) {
+        _clearWrongForm(state);
         state.isDown = true;
         state.message = 'Good! Now lower your knee';
       } else if (kneeHipDiff < 0.05 && legAngle > 160 && state.isDown) {
+        _clearWrongForm(state);
         state.isDown = false;
         state.repCount++;
         state.message = 'Rep ${state.repCount} completed!';
+      } else if (legAngle <= 150) {
+        _setWrongForm(state, 'Keep your standing leg straighter');
+      } else {
+        _setWrongForm(state, 'Lift your knee higher toward your chest');
       }
     }
   }

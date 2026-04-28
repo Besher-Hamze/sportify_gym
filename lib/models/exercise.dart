@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 enum ExerciseType {
   squat,
   pushup,
@@ -15,6 +13,7 @@ class Exercise {
   final String name;
   final String description;
   final String imageAsset;
+  final String gifAsset;
   final List<String> instructions;
   final String targetMuscles;
   final String difficulty;
@@ -26,6 +25,7 @@ class Exercise {
     required this.name,
     required this.description,
     required this.imageAsset,
+    required this.gifAsset,
     required this.instructions,
     required this.targetMuscles,
     required this.difficulty,
@@ -39,11 +39,15 @@ class ExerciseState {
   bool isDown = false;
   ExerciseType currentExercise = ExerciseType.none;
   String message = '';
+  bool isFormWrong = false;
+  String formMessage = '';
 
   void reset() {
     repCount = 0;
     isDown = false;
     message = '';
+    isFormWrong = false;
+    formMessage = '';
   }
 }
 
@@ -54,6 +58,7 @@ final List<Exercise> availableExercises = [
     description:
         'A compound exercise that targets multiple muscle groups in your lower body.',
     imageAsset: 'assets/images/squat.png',
+    gifAsset: 'assets/gif/squat.gif',
     instructions: [
       'Stand with feet shoulder-width apart',
       'Keep your back straight',
@@ -73,6 +78,7 @@ final List<Exercise> availableExercises = [
     description:
         'A classic upper body exercise that builds chest, shoulder, and arm strength.',
     imageAsset: 'assets/images/pushup.png',
+    gifAsset: 'assets/gif/pushup.gif',
     instructions: [
       'Start in plank position with hands shoulder-width apart',
       'Keep your body in a straight line',
@@ -92,6 +98,7 @@ final List<Exercise> availableExercises = [
     description:
         'An isolation exercise that targets the chest muscles through a wide range of motion.',
     imageAsset: 'assets/images/butterfly.png',
+    gifAsset: 'assets/gif/butterFly.gif',
     instructions: [
       'Stand with feet shoulder-width apart',
       'Raise your arms to shoulder height',
@@ -111,6 +118,7 @@ final List<Exercise> availableExercises = [
     description:
         'A unilateral exercise that improves balance, flexibility, and leg strength.',
     imageAsset: 'assets/images/lunge.png',
+    gifAsset: 'assets/gif/lunge.gif',
     instructions: [
       'Stand tall with feet hip-width apart',
       'Take a big step forward with one leg',
@@ -130,6 +138,7 @@ final List<Exercise> availableExercises = [
     description:
         'A dynamic warm-up exercise that improves shoulder mobility and circulation.',
     imageAsset: 'assets/images/arm_circles.png',
+    gifAsset: 'assets/gif/armCircles.gif',
     instructions: [
       'Stand with feet shoulder-width apart',
       'Extend arms out to the sides at shoulder height',
@@ -149,6 +158,7 @@ final List<Exercise> availableExercises = [
     description:
         'A core-strengthening exercise that targets the lower abdominal muscles.',
     imageAsset: 'assets/images/knee_raises.png',
+    gifAsset: 'assets/gif/kneeRaised.gif',
     instructions: [
       'Stand tall with feet hip-width apart',
       'Engage your core muscles',

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-import 'package:sportify_gym_porject/widget/exercise_guide.dart';
 import '../models/exercise.dart';
+import 'exercise_instructions_screen.dart';
 import '../services/pose_detection_exercise.dart';
 import '../utils/app_theme.dart';
 import '../widget/pose_pointer.dart';
@@ -32,7 +32,6 @@ class _PoseDetectionScreenState extends State<PoseDetectionScreen> with WidgetsB
   List<Pose>? _poses;
   String? _errorMessage;
   ExerciseState _exerciseState = ExerciseState();
-  bool _showGuide = false;
 
   static const _orientations = {
     DeviceOrientation.portraitUp: 0,
@@ -136,11 +135,11 @@ class _PoseDetectionScreenState extends State<PoseDetectionScreen> with WidgetsB
       if (inputImage != null) {
         final poses = await _poseDetector.processImage(inputImage);
         if (mounted && poses.isNotEmpty) {
+          _poseDetectionService.detectExercise(poses.first, _exerciseState);
           setState(() {
             _poses = poses;
             _errorMessage = null;
           });
-          _poseDetectionService.detectExercise(poses.first, _exerciseState);
         }
       }
     } catch (e) {
@@ -204,8 +203,19 @@ class _PoseDetectionScreenState extends State<PoseDetectionScreen> with WidgetsB
             onPressed: _toggleCamera,
           ),
           IconButton(
-            icon: Icon(_showGuide ? Icons.close : Icons.help_outline),
-            onPressed: () => setState(() => _showGuide = !_showGuide),
+            icon: const Icon(Icons.help_outline),
+            onPressed: () {
+              final exercise = getExerciseByType(_exerciseState.currentExercise);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ExerciseInstructionsScreen(
+                    exercise: exercise,
+                    cameras: widget.cameras,
+                    showStartButton: false,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -217,8 +227,7 @@ class _PoseDetectionScreenState extends State<PoseDetectionScreen> with WidgetsB
         fit: StackFit.expand,
         children: [
           _buildCameraPreview(),
-          if (_showGuide)
-            ExerciseGuide(type: _exerciseState.currentExercise),
+          _buildWrongFormAlert(),
           _buildExerciseOverlay(),
         ],
       ),
@@ -248,6 +257,43 @@ class _PoseDetectionScreenState extends State<PoseDetectionScreen> with WidgetsB
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildWrongFormAlert() {
+    if (!_exerciseState.isFormWrong) {
+      return const SizedBox.shrink();
+    }
+
+    return SafeArea(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+          margin: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.red.withOpacity(0.9),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.redAccent, width: 1.5),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: Colors.white),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  _exerciseState.formMessage,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

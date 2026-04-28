@@ -62,7 +62,7 @@ class ExerciseCard extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 Image.asset(
-                  exercise.imageAsset,
+                  exercise.gifAsset,
                   fit: BoxFit.cover,
                 ),
                 _buildImageGradient(),

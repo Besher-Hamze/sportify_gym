@@ -1,9 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import '../models/exercise.dart';
+import 'exercise_instructions_screen.dart';
 import '../utils/app_theme.dart';
 import '../widget/exercise_card.dart';
-import 'pose_detection_screen.dart';
 
 class ExerciseSelectionScreen extends StatelessWidget {
   final List<CameraDescription> cameras;
@@ -95,13 +95,13 @@ class ExerciseSelectionScreen extends StatelessWidget {
   }
 
   void _navigateToExercise(BuildContext context, Exercise exercise) {
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (context) => PoseDetectionScreen(
-    //       cameras: cameras,
-    //       initialExercise: exercise.type,
-    //     ),
-    //   ),
-    // );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ExerciseInstructionsScreen(
+          exercise: exercise,
+          cameras: cameras,
+        ),
+      ),
+    );
   }
 }
